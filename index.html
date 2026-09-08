@@ -1,1 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; max-width: 600px; }
+    .q-group { margin-bottom: 12px; }
+    label { display: block; font-weight: bold; margin-bottom: 4px; }
+    select { width: 100%; padding: 6px; }
+    #result { margin-top: 20px; padding: 15px; border-radius: 6px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>Pregnancy Readiness Calculator</h2>
+  <form id="quiz">
+    <div class="q-group"><label>1. Preconception Medical Checkup (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
+    <div class="q-group"><label>2. No Unmanaged Health Conditions (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
+    <div class="q-group"><label>3. Diet, Exercise & Substance Habits (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
+    <div class="q-group"><label>4. Understand Family Health History (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
+    <div class="q-group"><label>5. Timing Fits Studies & Work (1-5):</label><select class="score"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
+    <div class="q-group"><label>6. Clear Maternity/Parental Leave Plan (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select></div>
+    <div class="q-group"><label>7. Realistic Plan for Ongoing Commitments (1-5):</label><select class="score"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
+    <div class="q-group"><label>8. Clear Picture of Baby Costs (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select></div>
+    <div class="q-group"><label>9. Adequate Health Insurance Coverage (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
+    <div class="q-group"><label>10. Emergency Fund / Savings Buffer (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select></div>
+    <div class="q-group"><label>11. Alignment on Wanting Child Now (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></div>
+    <div class="q-group"><label>12. Childcare Division Discussed (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></div>
+  </form>
+
+  <button onclick="calculateScore()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Calculate Total Score</button>
+
+  <div id="result"></div>
+
+  <script>
+    function calculateScore() {
+      let selects = document.querySelectorAll('.score');
+      let total = 0;
+      selects.forEach(s => total += parseInt(s.value));
+      
+      let resDiv = document.getElementById('result');
+      let status = "";
+      
+      if (total >= 50) {
+        status = "50-60: Strong readiness. Most areas aligned[span_8](start_span)[span_8](end_span).";
+        resDiv.style.background = "#d4edda";
+      } else if (total >= 38) {
+        status = "38-49: Mostly ready, a few gaps. Revisit items rated 1-2[span_9](start_span)[span_9](end_span).";
+        resDiv.style.background = "#fff3cd";
+      } else if (total >= 26) {
+        status = "26-37: Not quite ready yet. Key categories need work[span_10](start_span)[span_10](end_span).";
+        resDiv.style.background = "#ffe5d0";
+      } else {
+        status = "14-25: Significant preparation needed[span_11](start_span)[span_11](end_span).";
+        resDiv.style.background = "#f8d7da";
+      }
+      
+      resDiv.innerHTML = "Total Score: " + total + " / 60<br>" + status;
+    }
+  </script>
+</body>
+</html>
 
