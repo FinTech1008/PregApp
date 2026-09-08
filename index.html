@@ -1,61 +1,185 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; max-width: 600px; }
-    .q-group { margin-bottom: 12px; }
-    label { display: block; font-weight: bold; margin-bottom: 4px; }
-    select { width: 100%; padding: 6px; }
-    #result { margin-top: 20px; padding: 15px; border-radius: 6px; font-weight: bold; }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pregnancy Readiness Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style> body { font-family: 'Inter', sans-serif; } </style>
 </head>
-<body>
-  <h2>Pregnancy Readiness Calculator</h2>
-  <form id="quiz">
-    <div class="q-group"><label>1. Preconception Medical Checkup (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
-    <div class="q-group"><label>2. No Unmanaged Health Conditions (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
-    <div class="q-group"><label>3. Diet, Exercise & Substance Habits (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
-    <div class="q-group"><label>4. Understand Family Health History (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
-    <div class="q-group"><label>5. Timing Fits Studies & Work (1-5):</label><select class="score"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
-    <div class="q-group"><label>6. Clear Maternity/Parental Leave Plan (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select></div>
-    <div class="q-group"><label>7. Realistic Plan for Ongoing Commitments (1-5):</label><select class="score"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
-    <div class="q-group"><label>8. Clear Picture of Baby Costs (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select></div>
-    <div class="q-group"><label>9. Adequate Health Insurance Coverage (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
-    <div class="q-group"><label>10. Emergency Fund / Savings Buffer (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select></div>
-    <div class="q-group"><label>11. Alignment on Wanting Child Now (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></div>
-    <div class="q-group"><label>12. Childcare Division Discussed (1-5):</label><select class="score"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></div>
-  </form>
+<body class="bg-slate-50 text-slate-800 min-h-screen pb-12">
+  <div class="max-w-xl mx-auto px-4 py-6">
+    
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-rose-500 to-pink-600 rounded-2xl p-6 text-white shadow-lg mb-6 text-center">
+      <h1 class="text-2xl font-bold">Pregnancy Readiness Calculator</h1>
+      <p class="text-rose-100 text-xs mt-1">Interactive Decision-Support Dashboard</p>
+    </div>
 
-  <button onclick="calculateScore()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Calculate Total Score</button>
+    <!-- Live Sticky Score Card -->
+    <div class="sticky top-4 z-10 bg-white/95 backdrop-blur-md rounded-xl p-4 shadow-md border border-slate-200 mb-6 flex justify-between items-center">
+      <div>
+        <span class="text-xs uppercase font-bold tracking-wider text-slate-400">Total Score</span>
+        <div class="text-2xl font-extrabold text-slate-800" id="score-display">41 <span class="text-sm font-normal text-slate-500">/ 60</span></div>
+      </div>
+      <div id="status-badge" class="px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
+        Mostly Ready
+      </div>
+    </div>
 
-  <div id="result"></div>
+    <form id="quiz-form" class="space-y-6">
+
+      <!-- Health -->
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 space-y-4">
+        <h2 class="font-bold text-rose-600 text-xs uppercase tracking-wide">🏥 Health & Medical</h2>
+        
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">1. Preconception medical checkup</label>
+            <input type="range" min="1" max="5" value="5" class="w-full accent-rose-500 score-input" oninput="updateScore()">
+            <div class="flex justify-between text-xs text-slate-400"><span>1 (Disagree)</span><span id="v1" class="font-bold text-slate-700">5</span><span>5 (Agree)</span></div>
+          </div>
+          <hr class="border-slate-100">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">2. No unmanaged health conditions</label>
+            <input type="range" min="1" max="5" value="5" class="w-full accent-rose-500 score-input" oninput="updateScore()">
+            <div class="flex justify-between text-xs text-slate-400"><span>1</span><span id="v2" class="font-bold text-slate-700">5</span><span>5</span></div>
+          </div>
+          <hr class="border-slate-100">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">3. Comfortable with diet & exercise habits</label>
+            <input type="range" min="1" max="5" value="5" class="w-full accent-rose-500 score-input" oninput="updateScore()">
+            <div class="flex justify-between text-xs text-slate-400"><span>1</span><span id="v3" class="font-bold text-slate-700">5</span><span>5</span></div>
+          </div>
+          <hr class="border-slate-100">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">4. Understand family health history</label>
+            <input type="range" min="1" max="5" value="5" class="w-full accent-rose-500 score-input" oninput="updateScore()">
+            <div class="flex justify-between text-xs text-slate-400"><span>1</span><span id="v4" class="font-bold text-slate-700">5</span><span>5</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timing & Logistics -->
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 space-y-4">
+        <h2 class="font-bold text-blue-600 text-xs uppercase tracking-wide">⏰ Timing & Logistics</h2>
+        
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">5. Timing fits studies & work commitments</label>
+            <input type="range" min="1" max="5" value="1" class="w-full accent-blue-500 score-input" oninput="updateScore()">
+            <div class="flex justify-between text-xs text-slate-400"><span>1</span><span id="v5" class="font-bold text-slate-700">1</span><span>5</span></div>
+          </div>
+          <hr class="border-slate-100">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">6. Clear maternity & parental leave plan</label>
+            <input type="range" min="1" max="5" value="4" class="w-full accent-blue-500 score-input" oninput="updateScore()">
+            <div class="flex justify-between text-xs text-slate-400"><span>1</span><span id="v6" class="font-bold text-slate-700">4</span><span>5</span></div>
+          </div>
+          <hr class="border-slate-100">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">7. Realistic plan for ongoing commitments</label>
+            <input type="range" min="1" max="5" value="1" class="w-full accent-blue-500 score-input" oninput="updateScore()">
+            <div class="flex justify-between text-xs text-slate-400"><span>1</span><span id="v7" class="font-bold text-slate-700">1</span><span>5</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Financial -->
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 space-y-4">
+        <h2 class="font-bold text-emerald-600 text-xs uppercase tracking-wide">💳 Financial Readiness</h2>
+        
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">8. Clear picture of delivery & baby costs</label>
+            <input type="range" min="1" max="5" value="4" class="w-full accent-emerald-500 score-input" oninput="updateScore()">
+            <div class="flex justify-between text-xs text-slate-400"><span>1</span><span id="v8" class="font-bold text-slate-700">4</span><span>5</span></div>
+          </div>
+          <hr class="border-slate-100">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">9. Adequate health insurance coverage</label>
+            <input type="range" min="1" max="5" value="5" class="w-full accent-emerald-500 score-input" oninput="updateScore()">
+            <div class="flex justify-between text-xs text-slate-400"><span>1</span><span id="v9" class="font-bold text-slate-700">5</span><span>5</span></div>
+          </div>
+          <hr class="border-slate-100">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">10. Emergency savings buffer</label>
+            <input type="range" min="1" max="5" value="4" class="w-full accent-emerald-500 score-input" oninput="updateScore()">
+            <div class="flex justify-between text-xs text-slate-400"><span>1</span><span id="v10" class="font-bold text-slate-700">4</span><span>5</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Emotional -->
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 space-y-4">
+        <h2 class="font-bold text-purple-600 text-xs uppercase tracking-wide">❤️ Emotional & Relational</h2>
+        
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">11. Genuine alignment on timing</label>
+            <input type="range" min="1" max="5" value="3" class="w-full accent-purple-500 score-input" oninput="updateScore()">
+            <div class="flex justify-between text-xs text-slate-400"><span>1</span><span id="v11" class="font-bold text-slate-700">3</span><span>5</span></div>
+          </div>
+          <hr class="border-slate-100">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">12. Childcare division discussed</label>
+            <input type="range" min="1" max="5" value="3" class="w-full accent-purple-500 score-input" oninput="updateScore()">
+            <div class="flex justify-between text-xs text-slate-400"><span>1</span><span id="v12" class="font-bold text-slate-700">3</span><span>5</span></div>
+          </div>
+        </div>
+      </div>
+
+    </form>
+
+    <!-- Verdict Box -->
+    <div class="mt-6 p-5 rounded-xl bg-white border border-slate-200 shadow-sm text-slate-700">
+      <h3 class="font-bold text-base mb-1" id="verdict-title">Assessment Summary</h3>
+      <p class="text-xs text-slate-600 leading-relaxed" id="verdict-desc">Adjust sliders to calculate real-time readiness status.</p>
+    </div>
+
+  </div>
 
   <script>
-    function calculateScore() {
-      let selects = document.querySelectorAll('.score');
+    function updateScore() {
+      const inputs = document.querySelectorAll('.score-input');
       let total = 0;
-      selects.forEach(s => total += parseInt(s.value));
-      
-      let resDiv = document.getElementById('result');
-      let status = "";
-      
+      inputs.forEach((input, index) => {
+        const val = parseInt(input.value);
+        total += val;
+        const label = document.getElementById(`v${index + 1}`);
+        if(label) label.textContent = val;
+      });
+
+      document.getElementById('score-display').innerHTML = `${total} <span class="text-sm font-normal text-slate-500">/ 60</span>`;
+
+      const badge = document.getElementById('status-badge');
+      const title = document.getElementById('verdict-title');
+      const desc = document.getElementById('verdict-desc');
+
       if (total >= 50) {
-        status = "50-60: Strong readiness. Most areas aligned[span_8](start_span)[span_8](end_span).";
-        resDiv.style.background = "#d4edda";
+        badge.className = "px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800";
+        badge.textContent = "Strong Readiness";
+        title.textContent = "Strong Readiness (50-60)";
+        desc.textContent = "Most key areas are aligned. Good time to move forward, ideally after a preconception checkup[span_1](start_span)[span_1](end_span).";
       } else if (total >= 38) {
-        status = "38-49: Mostly ready, a few gaps. Revisit items rated 1-2[span_9](start_span)[span_9](end_span).";
-        resDiv.style.background = "#fff3cd";
+        badge.className = "px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800";
+        badge.textContent = "Mostly Ready";
+        title.textContent = "Mostly Ready, Few Gaps (38-49)";
+        desc.textContent = "Solid overall, but revisit questions rated 1 or 2 (especially timing/logistics) before deciding[span_2](start_span)[span_2](end_span).";
       } else if (total >= 26) {
-        status = "26-37: Not quite ready yet. Key categories need work[span_10](start_span)[span_10](end_span).";
-        resDiv.style.background = "#ffe5d0";
+        badge.className = "px-3 py-1.5 rounded-full text-xs font-semibold bg-orange-100 text-orange-800";
+        badge.textContent = "Not Quite Ready";
+        title.textContent = "Not Quite Ready (26-37)";
+        desc.textContent = "Several important areas need work—particularly schedule bottlenecks and daily responsibilities[span_3](start_span)[span_3](end_span).";
       } else {
-        status = "14-25: Significant preparation needed[span_11](start_span)[span_11](end_span).";
-        resDiv.style.background = "#f8d7da";
+        badge.className = "px-3 py-1.5 rounded-full text-xs font-semibold bg-rose-100 text-rose-800";
+        badge.textContent = "Preparation Needed";
+        title.textContent = "Significant Preparation Needed (14-25)";
+        desc.textContent = "Use low-scoring questions as a concrete action list before reconsidering timing[span_4](start_span)[span_4](end_span).";
       }
-      
-      resDiv.innerHTML = "Total Score: " + total + " / 60<br>" + status;
     }
+    updateScore();
   </script>
 </body>
 </html>
-
